@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.example.picstone.R;
 
@@ -82,15 +83,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            Toast.makeText(this, "Clique no menu Home", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_my_pins) {
+            Toast.makeText(this, "Clique no menu Meus Pins", Toast.LENGTH_SHORT).show();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_favorites) {
+            Toast.makeText(this, "Clique no menu Favoritos", Toast.LENGTH_SHORT).show();
 
         }
 
