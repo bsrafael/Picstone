@@ -12,6 +12,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        displaySelectedScreen(R.id.nav_home);
     }
 
     @Override
@@ -78,22 +84,38 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        //calling the method displayselectedscreen and passing the id of selected menu
+        displaySelectedScreen(item.getItemId());
+        //make this method blank
+        return true;
+    }
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-            Toast.makeText(this, "Clique no menu Home", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_my_pins) {
-            Toast.makeText(this, "Clique no menu Meus Pins", Toast.LENGTH_SHORT).show();
+    private void displaySelectedScreen(int itemId) {
 
-        } else if (id == R.id.nav_favorites) {
-            Toast.makeText(this, "Clique no menu Favoritos", Toast.LENGTH_SHORT).show();
+        //creating fragment object
+        Fragment fragment = null;
 
+        //initializing the fragment object which is selected
+        switch (itemId) {
+            case R.id.nav_home:
+                fragment = new MapFragment();
+                break;
+            case R.id.nav_my_pins:
+                fragment = new PinsFragment();
+                break;
+            case R.id.nav_favorites:
+                fragment = new FavoritesFragment();
+                break;
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        //replacing the fragment
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }
