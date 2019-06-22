@@ -4,12 +4,15 @@ import com.example.picstone.models.input.ChangePasswordInputModel;
 import com.example.picstone.models.input.PostInputModel;
 import com.example.picstone.models.input.TokenInputModel;
 import com.example.picstone.models.input.UserInputModel;
+import com.example.picstone.models.output.ImageViewModel;
 import com.example.picstone.models.output.PostViewModel;
 import com.example.picstone.models.output.TokenViewModel;
 import com.example.picstone.models.output.UserViewModel;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -17,6 +20,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -74,7 +78,9 @@ public interface SoapstoneClient {
     @GET("api/posts/top")
     Call<List<PostViewModel>> getTopPosts(@Header("Authorization") String token, @Query("skip") int skip, @Query("take") int take);
 
-    // TODO image upload
+    @POST("api/posts/image") // TODO essa rota provavelmente vai mudar
+    Call<ImageViewModel> uploadImage(@Header("Authorization") String token, @Part MultipartBody.Part image, @Part("name") RequestBody requestBody);
+    // TODO finalizar: https://stackoverflow.com/questions/39953457/how-to-upload-image-file-in-retrofit-2
 
     @POST("api/posts")
     Call<PostViewModel> createPost(@Header("Authorization") String token, @Body PostInputModel inputModel);
