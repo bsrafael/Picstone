@@ -35,14 +35,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback{
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap map;
 
 
     private FusedLocationProviderClient fusedLocationClient;
-
 
 
     @Nullable
@@ -87,7 +86,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Explorar");
     }
 
@@ -97,8 +95,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         map = gm;
         map.getUiSettings().setZoomControlsEnabled(false);
+        map.setMyLocationEnabled(true);
 
         getLastKnownLocation();
+
     }
 
 
