@@ -21,6 +21,7 @@ import com.example.picstone.R;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.picstone.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +40,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap map;
+    private User user = null;
 
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -60,6 +62,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // obter a localização
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.getContext());
+        user = User.getInstance();
 
         return v;
     }
@@ -96,7 +99,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map = gm;
         map.getUiSettings().setZoomControlsEnabled(false);
         map.setMyLocationEnabled(true);
-
         getLastKnownLocation();
 
     }
@@ -114,6 +116,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
 
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
+                    user.setLocation(pos);
                 }
             }
         });
