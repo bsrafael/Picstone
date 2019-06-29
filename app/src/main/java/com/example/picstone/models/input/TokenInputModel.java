@@ -11,6 +11,11 @@ public class TokenInputModel {
     @Expose
     private String password;
 
+    public TokenInputModel(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public String getUsername() {
         return username;
     }

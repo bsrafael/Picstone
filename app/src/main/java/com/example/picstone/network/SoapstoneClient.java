@@ -2,11 +2,8 @@ package com.example.picstone.network;
 
 import com.example.picstone.models.input.ChangePasswordInputModel;
 import com.example.picstone.models.input.PostInputModel;
-import com.example.picstone.models.input.TokenInputModel;
-import com.example.picstone.models.input.UserInputModel;
 import com.example.picstone.models.output.ImageViewModel;
 import com.example.picstone.models.output.PostViewModel;
-import com.example.picstone.models.output.TokenViewModel;
 import com.example.picstone.models.output.UserViewModel;
 
 import java.util.List;

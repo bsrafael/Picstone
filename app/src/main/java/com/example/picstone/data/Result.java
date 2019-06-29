@@ -33,6 +33,18 @@ public class Result<T> {
         }
     }
 
+    public final static class Unauthorized extends Result {
+        private String message;
+
+        public Unauthorized(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
     // Error sub-class
     public final static class Error extends Result {
         private Exception error;

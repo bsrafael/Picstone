@@ -10,8 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ClientFactory {
-    // TODO alterar para a url real depois de hosteado
-    public static final String BASE_URL = "http://localhost:5000";
+    public static final String BASE_URL = "https://picstone.herokuapp.com";
 
     public static final SoapstoneClientPublic GetSoapstoneClient() {
         Retrofit retrofit = new Retrofit.Builder()

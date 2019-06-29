@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         user = User.getInstance();
         user.setUsername("fooser");
-
-
     }
 
     private void handleFloatingActionButton(View view) {
