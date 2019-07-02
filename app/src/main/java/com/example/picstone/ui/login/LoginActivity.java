@@ -41,21 +41,28 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.loginBtn);
         final Button registerButton = findViewById(R.id.create_account);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        final boolean DEBUG_BYPASS_LOGIN = true;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-
-                LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
-                Result<LoggedInUser> result = loginRepository.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-
-                if (result instanceof Result.Success) {
-                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-                    updateUiWithUser();
-                } else {
-                    // TODO a message or something
-                }
+//                System.out.println("\n---deu click (LoginActivity:49)");
+//
+//                LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
+//                Result<LoggedInUser> result = loginRepository.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+//                System.out.println("\n---vai pro if (LoginActivity:53)");
+//
+//                if (result instanceof Result.Success) {
+//                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+//                    updateUiWithUser();
+//                    System.out.println("\n----deu certo (LoginActivity:58)");
+//
+//                } else {
+//                    // TODO a message or something
+//                    System.out.println("\n----deu pau (LoginActivity:62)");
+//                }
+                if (DEBUG_BYPASS_LOGIN) updateUiWithUser(); //TODO: remove this after login is fixed.
             }
         });
 

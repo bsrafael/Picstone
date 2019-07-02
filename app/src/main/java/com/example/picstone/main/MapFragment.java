@@ -2,8 +2,10 @@ package com.example.picstone.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +30,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -98,14 +103,48 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         map = gm;
         map.getUiSettings().setZoomControlsEnabled(false);
+        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         map.setMyLocationEnabled(true);
         getLastKnownLocation();
+//        createAllMarkers();
+
+//        inicio
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent i = new Intent(getContext(), PinActivity.class);
+                i.putExtra("idMarker", marker.getTag().toString());
+                startActivity(i);
+                return false;
+
+
+
+            }
+
+        });
+
 
     }
 
 
+    /** Called when the user clicks a marker. */
+//    @Override
+//    public boolean onMarkerClick(final Marker marker) {
+//
+//        Toast.makeText(getContext(), "click", Toast.LENGTH_SHORT).show();
+//
+//        Intent i = new Intent(getContext(), PinActivity.class);
+//        i.putExtra("idMarker", marker.getTag().toString());
+//        startActivity(i);
+//
+//        return true;
+//    }
+
+
     private void getLastKnownLocation() {
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
@@ -118,8 +157,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
                     user.setLocation(pos);
                 }
+
+                if (user.getDEBUG_SAMPLE_MARKER_PICTURE() != null)
+                    createAllMarkers();
             }
+
         });
+    }
+
+    //TODO: properly create marker with it's params
+    public void createMarker(@NonNull LatLng location, @Nullable String idPin) {
+        Marker m = this.map.addMarker(new MarkerOptions()
+            .position(location)
+            .title("text"));
+        if (idPin != null) {
+            m.setTag(idPin); // salva um parâmetro no pin
+        }
+    }
+
+    //TODO: Get all markers from API.
+    public void createAllMarkers() {
+        createMarker(user.getLocation(), "exemplo");
+
     }
 
 

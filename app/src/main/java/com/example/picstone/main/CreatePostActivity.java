@@ -48,8 +48,8 @@ public class CreatePostActivity extends AppCompatActivity {
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                handleFloatingActionButton(view);
                 // TODO: submit post and enhance this if.
+                // TODO: The map will refresh after positive result, loading new pins. (MapFragment.java)
                 if (true) {
                     setResult(Activity.RESULT_OK);
                 }
@@ -61,11 +61,7 @@ public class CreatePostActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                handleFloatingActionButton(view);
-                // TODO: submit post and enhance this if.
-                if (true) {
-                    setResult(Activity.RESULT_CANCELED);
-                }
+                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });

@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity
     private FusedLocationProviderClient fusedLocationClient;
     private File photoFile;
 
+    private Fragment fragment_map = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +99,6 @@ public class MainActivity extends AppCompatActivity
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         user = User.getInstance();
-        user.setUsername("fooser");
     }
 
     private void handleFloatingActionButton(View view) {
@@ -150,8 +152,9 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
 
         switch (itemId) {
-            case R.id.nav_home:
+            case R.id.nav_home:{
                 fragment = new MapFragment();
+            }
                 break;
             case R.id.nav_my_pins:
                 fragment = new PinsFragment();
@@ -322,9 +325,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
-
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == CAMERA) {
 
@@ -333,11 +333,14 @@ public class MainActivity extends AppCompatActivity
                     Uri.fromFile(photoFile))
             );
             createPost(Uri.fromFile(photoFile));
+            user.setDEBUG_SAMPLE_MARKER_PICTURE(Uri.fromFile(photoFile)); //TODO: Remove this.
         }
 
         if (requestCode == CREATE_POST) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Pin criado com sucesso!", Toast.LENGTH_SHORT).show();
+                displaySelectedScreen(R.id.nav_home);
+
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Você cancelou a criação do pin.", Toast.LENGTH_SHORT).show();
             }

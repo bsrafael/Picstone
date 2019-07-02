@@ -1,12 +1,16 @@
 package com.example.picstone;
 
+import android.net.Uri;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class User {
     private LatLng location = null;
-    private String username = null;
+    private String username = "John Sample";
     private String email = null;
     private String password = null;
+
+    private Uri DEBUG_SAMPLE_MARKER_PICTURE = null; //TODO: Remove this
 
     private static User user = null;
 
@@ -35,5 +39,13 @@ public class User {
             user = new User();
         }
         return user;
+    }
+
+    public Uri getDEBUG_SAMPLE_MARKER_PICTURE() {
+        return DEBUG_SAMPLE_MARKER_PICTURE;
+    }
+
+    public void setDEBUG_SAMPLE_MARKER_PICTURE(Uri DEBUG_SAMPLE_MARKER_PICTURE) {
+        this.DEBUG_SAMPLE_MARKER_PICTURE = DEBUG_SAMPLE_MARKER_PICTURE;
     }
 }

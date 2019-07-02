@@ -3,7 +3,6 @@
     package="com.example.picstone">
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -22,8 +21,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -35,14 +32,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.CreatePostActivity"></activity>
+        <activity android:name=".main.PinActivity"></activity>
+        <activity android:name=".main.CreatePostActivity" />
         <activity
             android:name=".main.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".main.RegisterActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/app_name">
@@ -69,7 +67,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/providers_path" />
         </provider>
-
     </application>
 
 </manifest>
