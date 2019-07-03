@@ -51,4 +51,11 @@ public class LoginRepository {
         }
         return result;
     }
+
+    public String getUserToken() throws Exception {
+        if (!isLoggedIn())
+            throw new Exception("Unauthorized");
+
+        return user.GetAccessToken();
+    }
 }

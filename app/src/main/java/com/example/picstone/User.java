@@ -5,10 +5,9 @@ import android.net.Uri;
 import com.google.android.gms.maps.model.LatLng;
 
 public class User {
-    private LatLng location = null;
-    private String username = "John Sample";
-    private String email = null;
-    private String password = null;
+    private LatLng location;
+    private String username;
+    private String token;
 
     private Uri DEBUG_SAMPLE_MARKER_PICTURE = null; //TODO: Remove this
 
@@ -32,6 +31,14 @@ public class User {
 
     public void setLocation(LatLng location) {
         this.location = location;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public static User getInstance() {
