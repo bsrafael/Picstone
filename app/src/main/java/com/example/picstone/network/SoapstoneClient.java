@@ -14,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -66,6 +67,7 @@ public interface SoapstoneClient {
     @GET("api/posts/top")
     Call<List<PostViewModel>> getTopPosts(@Query("skip") int skip, @Query("take") int take);
 
+    @Multipart
     @POST("api/posts/image") // TODO essa rota provavelmente vai mudar
     Call<ImageViewModel> uploadImage(@Part MultipartBody.Part image);
     // Call<ImageViewModel> uploadImage(@Part MultipartBody.Part image, @Part("name") RequestBody requestBody);

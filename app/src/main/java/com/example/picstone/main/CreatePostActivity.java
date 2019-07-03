@@ -111,7 +111,8 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void UploadImage() {
         File file = new File(imageUri.getPath());
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        // RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
         client.uploadImage(body).enqueue(new Callback<ImageViewModel>() {
