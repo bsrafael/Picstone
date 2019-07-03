@@ -196,10 +196,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private PostViewModel getPost(String id) {
-        for (PostViewModel post: posts) {
-            if (post.getId().equals(id))
-                return post;
-        }
+        if (posts != null)
+            for (PostViewModel post: posts) {
+                if (post.getId().equals(id))
+                    return post;
+            }
 
         return null;
     }
@@ -258,10 +259,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onResponse(Call<List<PostViewModel>> call, Response<List<PostViewModel>> response) {
                 List<PostViewModel> viewModels = response.body();
 
-                for (PostViewModel viewModel: viewModels) {
-                    LatLng pinLocation = new LatLng(viewModel.getLatitude(), viewModel.getLongitude());
-                    createMarker(pinLocation, viewModel.getId());
-                }
+                if (viewModels != null)
+                    for (PostViewModel viewModel: viewModels) {
+                        LatLng pinLocation = new LatLng(viewModel.getLatitude(), viewModel.getLongitude());
+                        createMarker(pinLocation, viewModel.getId());
+                    }
 
                 posts = viewModels;
 
@@ -275,7 +277,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        createMarker(user.getLocation(), "exemplo");
+//        createMarker(user.getLocation(), "exemplo");
 
     }
 
