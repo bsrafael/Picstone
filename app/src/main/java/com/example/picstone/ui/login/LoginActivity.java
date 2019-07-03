@@ -1,41 +1,23 @@
 package com.example.picstone.ui.login;
 
-import android.app.Activity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.picstone.R;
 import com.example.picstone.User;
-import com.example.picstone.data.LoginDataSource;
-import com.example.picstone.data.LoginRepository;
-import com.example.picstone.data.Result;
-import com.example.picstone.data.model.LoggedInUser;
 import com.example.picstone.main.MainActivity;
 import com.example.picstone.main.RegisterActivity;
 import com.example.picstone.models.input.TokenInputModel;
 import com.example.picstone.models.output.TokenViewModel;
 import com.example.picstone.network.ClientFactory;
-import com.example.picstone.network.SoapstoneClient;
 import com.example.picstone.network.SoapstoneClientPublic;
-import com.google.android.gms.common.api.Api;
-
-import java.net.UnknownServiceException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
