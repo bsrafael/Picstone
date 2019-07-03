@@ -59,9 +59,25 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO um loading aqui seria massa
+                String email = emailEdit.getText().toString();
+
+                if (!email.equals(confirmEmailEdit.getText().toString()))
+                {
+                    Toast.makeText(getApplicationContext(), "Email inválido", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String password = passwordEdit.getText().toString();
+
+                if (!password.equals(confirmPasswordEdit.getText().toString()))
+                {
+                    Toast.makeText(getApplicationContext(), "Senha inválida", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 UserInputModel inputModel = new UserInputModel();
-                inputModel.setEmail(emailEdit.getText().toString());
-                inputModel.setPassword(passwordEdit.getText().toString());
+                inputModel.setEmail(email);
+                inputModel.setPassword(password);
                 inputModel.setUsername(usernameEdit.getText().toString());
 
                 clientPublic.createUser(inputModel).enqueue(
