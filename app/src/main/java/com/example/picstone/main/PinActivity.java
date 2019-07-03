@@ -17,11 +17,17 @@ import java.util.GregorianCalendar;
 
 public class PinActivity extends AppCompatActivity {
 
-    PhotoView pinPhoto;
-    TextView pinText;
-    TextView pinAuthor;
-    TextView pinData;
-    User user = null;
+    public static final String ID_KEY = "idMarker";
+    public static final String PHOTO_KEY = "photoMarker";
+    public static final String TEXT_KEY = "textMarker";
+    public static final String AUTHOR_KEY = "authorMarker";
+    public static final String DATA_KEY = "dataMarker";
+
+    private PhotoView pinPhoto;
+    private TextView pinText;
+    private TextView pinAuthor;
+    private TextView pinData;
+    private User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +47,23 @@ public class PinActivity extends AppCompatActivity {
             String idMarker;
 
             try {
-                idMarker = bundle.getString("idMarker");
+                idMarker = bundle.getString(ID_KEY);
                 if (idMarker != null) {
-                    pinPhoto.setImageURI(user.getDEBUG_SAMPLE_MARKER_PICTURE());
-                    pinText.setText("texto exemplo do pin bonitão cadastrado pelo usuário para a foto acima, que por sinal também é exemplo (última tirada)");
-                    pinAuthor.setText(user.getUsername());
-                    pinData.setText(new Date(System.currentTimeMillis()).toString());
+                    String imageUri = bundle.getString(PHOTO_KEY);
+                    if (imageUri != null)
+                        pinPhoto.setImageURI(Uri.parse(imageUri));
+
+                    String text = bundle.getString(TEXT_KEY);
+                    if (text != null)
+                        pinText.setText(text);
+
+                    String author = bundle.getString(AUTHOR_KEY);
+                    if (author != null)
+                        pinAuthor.setText(author);
+
+                    String data = bundle.getString((DATA_KEY));
+                    if (data != null)
+                        pinData.setText(data);
                 }
             } catch (Exception e) {
                 Toast.makeText(this, "Não foi possível carregar a imagem pelo URI: excessão inesperada", Toast.LENGTH_SHORT).show();

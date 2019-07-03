@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +26,9 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.picstone.User;
+import com.example.picstone.models.output.PostViewModel;
+import com.example.picstone.network.ClientFactory;
+import com.example.picstone.network.SoapstoneClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,6 +43,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 
@@ -47,9 +58,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
     private User user = null;
 
+    private List<PostViewModel> posts;
 
     private FusedLocationProviderClient fusedLocationClient;
 
+    private SoapstoneClient client;
+
+    private LocationListener locationListener;
+
+    private final float MIN_DISTANCE_BETWEEN_REQUESTS = 10; // meters
 
     @Nullable
     @Override
@@ -69,7 +86,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.getContext());
         user = User.getInstance();
 
+        try
+        {
+            String token = user.getToken();
+            client = ClientFactory.GetSoapstoneClient(token);
+        }
+        catch (Exception e)
+        {
+            // TODO on unauthorized
+        }
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (shouldMakeANewRequest(location)) // TODO aqui provavelmente precisa das permissoes tambem
+                    createAllMarkers(location);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
         return v;
+    }
+
+    private boolean shouldMakeANewRequest(Location location) {
+        if (user.getLocation() == null)
+            return true;
+
+        Location temp = new Location(LocationManager.GPS_PROVIDER);
+        temp.setLatitude(user.getLocation().latitude);
+        temp.setLongitude(user.getLocation().longitude);
+
+        return location.distanceTo(temp) > MIN_DISTANCE_BETWEEN_REQUESTS;
     }
 
     @Override
@@ -115,17 +176,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Intent i = new Intent(getContext(), PinActivity.class);
-                i.putExtra("idMarker", marker.getTag().toString());
-                startActivity(i);
+                PostViewModel post = getPost(marker.getTag().toString());
+
+                if (post != null) {
+                    i.putExtra(PinActivity.ID_KEY, post.getId());
+                    i.putExtra(PinActivity.PHOTO_KEY, post.getImageUrl());
+                    i.putExtra(PinActivity.TEXT_KEY, post.getMessage());
+                    i.putExtra(PinActivity.AUTHOR_KEY, post.getUserId()); // TODO acertar depois de ajeitar no back
+                    i.putExtra(PinActivity.DATA_KEY, post.getCreatedAt().toString());
+                    startActivity(i);
+
+                    // TODO reload posts? if yes just call getLastKnownLocation
+                }
+
                 return false;
-
-
-
             }
 
         });
+    }
 
+    private PostViewModel getPost(String id) {
+        for (PostViewModel post: posts) {
+            if (post.getId().equals(id))
+                return post;
+        }
 
+        return null;
     }
 
 
@@ -156,10 +232,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
                     user.setLocation(pos);
-                }
 
-                if (user.getDEBUG_SAMPLE_MARKER_PICTURE() != null)
-                    createAllMarkers();
+                    createAllMarkers(location);
+                }
             }
 
         });
@@ -168,15 +243,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //TODO: properly create marker with it's params
     public void createMarker(@NonNull LatLng location, @Nullable String idPin) {
         Marker m = this.map.addMarker(new MarkerOptions()
-            .position(location)
-            .title("text"));
+            .position(location));
         if (idPin != null) {
             m.setTag(idPin); // salva um parâmetro no pin
         }
     }
 
     //TODO: Get all markers from API.
-    public void createAllMarkers() {
+    public void createAllMarkers(final Location location) {
+        Call<List<PostViewModel>> call = client.getPostsNearUser(location.getLatitude(), location.getLongitude(), 0, 500);
+
+        call.enqueue(new Callback<List<PostViewModel>>() {
+            @Override
+            public void onResponse(Call<List<PostViewModel>> call, Response<List<PostViewModel>> response) {
+                List<PostViewModel> viewModels = response.body();
+
+                for (PostViewModel viewModel: viewModels) {
+                    LatLng pinLocation = new LatLng(viewModel.getLatitude(), viewModel.getLongitude());
+                    createMarker(pinLocation, viewModel.getId());
+                }
+
+                posts = viewModels;
+
+                LatLng pt = new LatLng(location.getLatitude(), location.getLongitude());
+                user.setLocation(pt);
+            }
+
+            @Override
+            public void onFailure(Call<List<PostViewModel>> call, Throwable t) {
+                Toast.makeText(getContext(), "Erro ao carregar as mensagens. " + t.getMessage(), Toast.LENGTH_LONG);
+            }
+        });
+
         createMarker(user.getLocation(), "exemplo");
 
     }

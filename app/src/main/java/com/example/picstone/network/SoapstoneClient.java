@@ -67,7 +67,8 @@ public interface SoapstoneClient {
     Call<List<PostViewModel>> getTopPosts(@Query("skip") int skip, @Query("take") int take);
 
     @POST("api/posts/image") // TODO essa rota provavelmente vai mudar
-    Call<ImageViewModel> uploadImage(@Part MultipartBody.Part image, @Part("name") RequestBody requestBody);
+    Call<ImageViewModel> uploadImage(@Part MultipartBody.Part image);
+    // Call<ImageViewModel> uploadImage(@Part MultipartBody.Part image, @Part("name") RequestBody requestBody);
     // TODO finalizar: https://stackoverflow.com/questions/39953457/how-to-upload-image-file-in-retrofit-2
 
     @POST("api/posts")

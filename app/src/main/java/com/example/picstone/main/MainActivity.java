@@ -4,17 +4,20 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.picstone.User;
+import com.example.picstone.models.output.PostViewModel;
+import com.example.picstone.network.ClientFactory;
+import com.example.picstone.network.SoapstoneClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -35,7 +38,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.picstone.R;
@@ -44,6 +46,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -66,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     private Fragment fragment_map = null;
 
-
+    private SoapstoneClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +106,33 @@ public class MainActivity extends AppCompatActivity
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         user = User.getInstance();
+
+        try
+        {
+            String token = user.getToken();
+            client = ClientFactory.GetSoapstoneClient(token);
+        }
+        catch (Exception e)
+        {
+            // TODO on unauthorized
+        }
+    }
+
+    private void getPostsNearLocation(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        client.getPostsNearUser(latitude, longitude).enqueue(new Callback<List<PostViewModel>>() {
+            @Override
+            public void onResponse(Call<List<PostViewModel>> call, Response<List<PostViewModel>> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<List<PostViewModel>> call, Throwable t) {
+
+            }
+        });
     }
 
     private void handleFloatingActionButton(View view) {

@@ -7,19 +7,46 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.picstone.R;
 
+import com.example.picstone.User;
+import com.example.picstone.models.input.PostInputModel;
+import com.example.picstone.models.output.ImageViewModel;
+import com.example.picstone.models.output.PostViewModel;
+import com.example.picstone.network.ClientFactory;
+import com.example.picstone.network.SoapstoneClient;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
+import java.io.File;
+import java.util.Date;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CreatePostActivity extends AppCompatActivity {
 
 
-    PhotoView photoTaken;
-    Button btnPublish;
-    Button btnCancel;
+    private PhotoView photoTaken;
+    private Button btnPublish;
+    private Button btnCancel;
+    private EditText edtMessage;
+
+    private SoapstoneClient client;
+
+    private Uri imageUri;
+    private String uploadedUrl;
+
+    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +56,7 @@ public class CreatePostActivity extends AppCompatActivity {
         photoTaken = (PhotoView) findViewById(R.id.photoTaken);
         btnPublish = (Button) findViewById(R.id.btn_publish_post);
         btnCancel = (Button) findViewById(R.id.btn_cancel_post);
+        edtMessage = findViewById(R.id.editText); // TODO probably a good idea to change
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -37,6 +65,7 @@ public class CreatePostActivity extends AppCompatActivity {
             try {
                 uriId = Uri.parse(bundle.getString("resUri"));
                 if (uriId != null) {
+                    imageUri = uriId;
                     photoTaken.setImageURI(uriId);
                 }
             } catch (Exception e) {
@@ -45,16 +74,28 @@ public class CreatePostActivity extends AppCompatActivity {
 
         }
 
+        try
+        {
+            String token = User.getInstance().getToken();
+            client = ClientFactory.GetSoapstoneClient(token);
+        }
+        catch (Exception e)
+        {
+            // TODO on unauthorized
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: submit post and enhance this if.
-                // TODO: The map will refresh after positive result, loading new pins. (MapFragment.java)
-                if (true) {
-                    setResult(Activity.RESULT_OK);
-                }
+                if (!validate())
+                    return;
 
-                finish();
+                if (uploadedUrl == null)
+                    UploadImage();
+                else
+                    CreatePost();
             }
         });
 
@@ -66,5 +107,67 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void UploadImage() {
+        File file = new File(imageUri.getPath());
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
+        client.uploadImage(body).enqueue(new Callback<ImageViewModel>() {
+            @Override
+            public void onResponse(Call<ImageViewModel> call, Response<ImageViewModel> response) {
+                uploadedUrl = response.body().getImageUrl();
+                CreatePost();
+            }
+
+            @Override
+            public void onFailure(Call<ImageViewModel> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Falha ao fazer o upload da imagem " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void CreatePost() {
+        PostInputModel inputModel = new PostInputModel();
+        inputModel.setImageUrl(uploadedUrl);
+        inputModel.setLatitude(User.getInstance().getLocation().latitude);
+        inputModel.setLongitude(User.getInstance().getLocation().longitude);
+        inputModel.setMessage(edtMessage.getText().toString());
+
+        client.createPost(inputModel).enqueue(new Callback<PostViewModel>() {
+            @Override
+            public void onResponse(Call<PostViewModel> call, Response<PostViewModel> response) {
+                if (true) {
+                    setResult(Activity.RESULT_OK);
+                }
+
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<PostViewModel> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Falha ao criar o post " + t, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private boolean validate() {
+        if (imageUri == null)
+            return false;
+
+        String message = edtMessage.getText().toString();
+
+        if (message.length() == 0) {
+            Toast.makeText(getApplicationContext(), "Preencha a mensagem", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (message.length() > 80) {
+            Toast.makeText(getApplicationContext(), "Mensagem longa demais", Toast.LENGTH_SHORT).show();;
+            return false;
+        }
+
+        return true;
     }
 }
