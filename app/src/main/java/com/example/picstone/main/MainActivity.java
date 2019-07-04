@@ -118,23 +118,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void getPostsNearLocation(Location location) {
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-
-        client.getPostsNearUser(latitude, longitude).enqueue(new Callback<List<PostViewModel>>() {
-            @Override
-            public void onResponse(Call<List<PostViewModel>> call, Response<List<PostViewModel>> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<List<PostViewModel>> call, Throwable t) {
-
-            }
-        });
-    }
-
     private void handleFloatingActionButton(View view) {
         updateUserLocation();
         takePicture();

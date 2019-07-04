@@ -1,5 +1,8 @@
 package com.example.picstone.network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -13,9 +16,13 @@ public class ClientFactory {
     public static final String BASE_URL = "https://picstone.herokuapp.com";
 
     public static final SoapstoneClientPublic GetSoapstoneClient() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         return retrofit.create(SoapstoneClientPublic.class);
@@ -33,10 +40,14 @@ public class ClientFactory {
             }
         }).build();
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         return retrofit.create(SoapstoneClient.class);

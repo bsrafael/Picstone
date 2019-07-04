@@ -273,7 +273,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onFailure(Call<List<PostViewModel>> call, Throwable t) {
-                Toast.makeText(getContext(), "Erro ao carregar as mensagens. " + t.getMessage(), Toast.LENGTH_LONG);
+                String message = t.getMessage();
+                Toast.makeText(getContext(), "Erro ao carregar as mensagens. " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
