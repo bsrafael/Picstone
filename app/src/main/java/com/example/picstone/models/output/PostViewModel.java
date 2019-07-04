@@ -12,6 +12,9 @@ public class PostViewModel {
     @SerializedName("userId")
     @Expose
     private String userId;
+    @SerializedName("author")
+    @Expose
+    private String author;
     @SerializedName("message")
     @Expose
     private String message;
@@ -54,6 +57,14 @@ public class PostViewModel {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getMessage() {

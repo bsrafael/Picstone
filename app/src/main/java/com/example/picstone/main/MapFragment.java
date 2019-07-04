@@ -182,7 +182,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     i.putExtra(PinActivity.ID_KEY, post.getId());
                     i.putExtra(PinActivity.PHOTO_KEY, post.getImageUrl());
                     i.putExtra(PinActivity.TEXT_KEY, post.getMessage());
-                    i.putExtra(PinActivity.AUTHOR_KEY, post.getUserId()); // TODO acertar depois de ajeitar no back
+                    i.putExtra(PinActivity.AUTHOR_KEY, post.getAuthor());
                     i.putExtra(PinActivity.DATA_KEY, post.getCreatedAt().toString());
                     startActivity(i);
 
