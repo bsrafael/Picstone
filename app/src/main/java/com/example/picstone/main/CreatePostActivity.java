@@ -92,6 +92,8 @@ public class CreatePostActivity extends AppCompatActivity {
                 if (!validate())
                     return;
 
+                Toast.makeText(CreatePostActivity.this, "Criando o post, aguarde...", Toast.LENGTH_LONG).show();
+                btnPublish.setEnabled(false);
                 if (uploadedUrl == null)
                     UploadImage();
                 else
@@ -148,6 +150,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 }
 
                 System.out.println(response.message());
+                btnPublish.setEnabled(true); //reabilita botão de enviar
                 finish();
             }
 

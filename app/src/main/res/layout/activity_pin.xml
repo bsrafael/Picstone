@@ -7,19 +7,21 @@
     tools:context=".main.PinActivity">
 
     <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/pinPhoto"
-        android:layout_width="0dp"
-        android:layout_height="350dp"
-        android:layout_marginBottom="24dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/pinText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="300dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:src="@tools:sample/backgrounds/scenic[8]" />
+    android:id="@+id/pinPhoto"
+    android:layout_width="0dp"
+    android:layout_height="300dp"
+    android:layout_marginBottom="24dp"
+    android:minHeight="300dp"
+    android:scaleType="fitCenter"
+    app:layout_constraintBottom_toTopOf="@+id/pinText"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHeight_max="300dp"
+    app:layout_constraintHeight_min="300dp"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0"
+    tools:src="@tools:sample/backgrounds/scenic[8]"></com.github.chrisbanes.photoview.PhotoView>
 
     <TextView
         android:id="@+id/pinText"
@@ -66,5 +68,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pinAuthor" />
+
+    <!--<ImageView-->
+        <!--android:id="@+id/pinPhoto"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="300dp"-->
+        <!--android:layout_marginBottom="24dp"-->
+        <!--android:minHeight="300dp"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/pinText"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHeight_max="300dp"-->
+        <!--app:layout_constraintHeight_min="300dp"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.0"-->
+        <!--tools:src="@tools:sample/backgrounds/scenic[8]" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

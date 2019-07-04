@@ -9,7 +9,7 @@
     <string name="action_register">Criar conta</string>
 
     <string name="action_sign_in_short">Entrar</string>
-    <string name="welcome">"FAZER O LOGIN DIREITO! "</string>
+    <string name="welcome">"Boas vindas! "</string>
 
 
     <string name="login_failed">"Login falhou"</string>
