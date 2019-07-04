@@ -34,4 +34,5 @@
     <string name="action_cancel">Cancelar</string>
     <string name="action_publish">Publicar</string>
     <string name="prompt_description">Descrição</string>
+    <string name="menu_about">Sobre o app</string>
 </resources>

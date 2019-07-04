@@ -12,14 +12,14 @@ import androidx.fragment.app.Fragment;
 import com.example.picstone.R;
 
 
-public class PinsFragment extends Fragment {
+public class AboutFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
-        return inflater.inflate(R.layout.fragment_my_pins, container, false);
+        return inflater.inflate(R.layout.fragment_about, container, false);
     }
 
 

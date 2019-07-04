@@ -186,16 +186,18 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
 
         switch (itemId) {
-            case R.id.nav_home:{
+            case R.id.nav_home:
                 fragment = new MapFragment();
-            }
-                break;
-            case R.id.nav_my_pins:
-                fragment = new PinsFragment();
-                break;
-            case R.id.nav_favorites:
-                fragment = new FavoritesFragment();
-                break;
+            break;
+//            case R.id.nav_my_pins:
+//                fragment = new PinsFragment();
+//                break;
+//            case R.id.nav_favorites:
+//                fragment = new FavoritesFragment();
+//                break;
+            case R.id.nav_about:
+                fragment = new AboutFragment();
+            break;
         }
 
         if (fragment != null) {
